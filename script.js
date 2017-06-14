@@ -95,33 +95,22 @@ document.addEventListener("DOMContentLoaded",function(){
 
 	function runPuzzle(){
 		run.disabled = true;
-		var run_numbers = numbers.slice();
+		var pool = cartProd(numbers, numbers, numbers, numbers);
+		var guess = [0,0,1,1];
+		var i = 0;
+
 // secret = [1,1,2,3];
 console.log(secret);
-		for (var i = 0; i < 6; i++) {
-			
-			if(i == 0) {
-				guess = [0,0,1,1];
-			}
-			else {
-				guess = [randnumb(run_numbers), randnumb(run_numbers), randnumb(run_numbers), randnumb(run_numbers)];
-			}
 
-console.log(guess);
+		while(true){
+
+			if(i > 0) {
+				pool = filterPool(pool, guess, answer);
+
+				guess = makeGuess(pool, answer);
+			}
 
 			answer = secret.slice().checkMove(guess.slice());//ne nu a huli on menyatsya!
-
-			//remove absent numbers
-			if(answer[0] == 0 && answer[1] == 0) {
-				run_numbers.removeNumbers(guess);
-			}
-			else {
-				//console.log(cartProd(guess, guess, guess, guess));
-			}
-
-			// console.log(answer);
-			//console.log(numbers);
-			
 
 			//fill secret
 			// Array.prototype.forEach.call(tgt_color, function(node, i) {
@@ -152,52 +141,71 @@ console.log(guess);
 				}
 			});
 
+			i++;
+
 			if(answer[0] == 4) {
-				error.innerHTML = 'You win!';
+				error.innerHTML = 'You win in '+ i +' moves!';
 				error.style.display = 'block';
 				break;
-			}
+			}	
 		}
 	}
+	
+	//https://stackoverflow.com/a/12305169/6797324
+	function cartProd(paramArray) {
 
-	// function cartProd(paramArray) {
+		function addTo(curr, args) {
+			var i, copy, 
+			rest = args.slice(1),
+			last = !rest.length,
+			result = [];
 
-	//   function addTo(curr, args) {
-	//     var i, copy, 
-	//         rest = args.slice(1),
-	//         last = !rest.length,
-	//         result = [];
+			for (i = 0; i < args[0].length; i++) {
+				copy = curr.slice();
+				copy.push(args[0][i]);
 
-	//     for (i = 0; i < args[0].length; i++) {
-	//       copy = curr.slice();
-	//       copy.push(args[0][i]);
+				if (last) {
+					result.push(copy);
 
-	//       if (last) {
-	//         result.push(copy);
+				} else {
+					result = result.concat(addTo(copy, rest));
+				}
+			}
+			return result;
+		}
 
-	//       } else {
-	//         result = result.concat(addTo(copy, rest));
-	//       }
-	//     }
-	//     return result;
-	//   }
-
-	//   return addTo([], Array.prototype.slice.call(arguments));
-	// }
-
-	function randnumb (numb) {
-		r = Math.floor(Math.random() * numb.length);
-		return numb[r];
+		return addTo([], Array.prototype.slice.call(arguments));
 	}
 
-	Array.prototype.removeNumbers = function (array) {
-		for (var i = 0; i < array.length; i++) {
-			el = this.indexOf(array[i]);
-			if(el !== -1) {
-				this.splice(el, 1);
+	//Highly inspired by http://github.com/michael0x2a/mastermind-solver
+	function filterPool(pool, guess, answer) {
+		var output = [];
+		pool.forEach(function(possible, index, list, callback) {
+			if (poolMatch(guess, answer, possible) && (possible !== guess)) {
+				output.push(possible);
 			}
-		}
-		return this;
+		});
+		return output;
+	}
+
+	function makeGuess(pool, answer){
+		var min_length = Number.POSITIVE_INFINITY;
+		var best_choice = null;
+
+		pool.forEach(function(possible, index, list) {
+			var length = filterPool(pool, possible, answer).length;
+			if (min_length > length) {
+				min_length = length;
+				best_choice = possible;
+			}
+		});
+		
+		return best_choice;
+	}
+	
+	function poolMatch(guess, answer, possible) {
+		var answer2 = possible.slice().checkMove(guess.slice());
+		return (answer[0] === answer2[0]) && (answer[1] === answer2[1]);
 	}
 
 	Array.prototype.checkMove = function (array) {
