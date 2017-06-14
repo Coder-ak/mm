@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded",function(){
 		if(full){
 			secret.splice(i, 1, colors.indexOf(e.target.style.backgroundColor));
 		}
-		if(secret.length == 4) {	
+		if(secret.length == 4 && full) {	
 			run.disabled = false;
 		}
 	}
