@@ -1,0 +1,107 @@
+body {
+	padding: 2em 0;
+}
+/*https://css-tricks.com/snippets/css/a-guide-to-flexbox/*/
+.wrapper {
+	display: flex;
+	flex-flow: row wrap;
+	text-align: center;
+}
+.wrapper > * {
+	padding: 10px;
+	flex: 1 100%;
+	text-align: center;
+}
+.main {
+	width: 250px;
+	height: 50px;
+	white-space: nowrap;
+	background: #037b7d;
+}
+.aside {
+	width: 250px;
+	white-space: nowrap;
+}
+.aside-l {
+	
+}
+.aside-r button {
+	padding: 5px;
+	width: 50px;
+	margin: 10px;
+	line-height: 20px;
+	text-align: center;
+	display: inline-block;
+	cursor: pointer;
+	border: none;
+	background-color: #c4c4c4;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+.row div{
+	background-color: #c4c4c4;
+	padding: 5px;
+	width: 20px;
+	height: 20px;
+	margin: 10px;
+	line-height: 20px;
+	text-align: center;
+	display: inline-block;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+.row_hint div{
+	padding: 5px;
+	width: 5px;
+	height: 5px;
+	margin: 5px;
+	line-height: 5px;
+	text-align: center;
+	display: inline-block;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+.row_hint .b {
+	background: black;
+	border: 1px solid black;
+}
+.row_hint .w {
+	border: 1px solid black;
+}
+#tgt_color div.over {
+  outline: 2px dashed #000;
+}
+#num {
+	margin-left: -12px;
+}
+.error {
+	display: none;
+	position: fixed;
+	padding: 10px 20px;
+	top: 50%;
+	left: 50%;
+	font-size: 2em;
+	transform: translate(-50%, -50%);
+	border: 2px dashed red;
+	background: white;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+@media all and (min-width: 600px) {
+	.aside {
+		flex: 1 auto;
+	}
+}
+@media all and (min-width: 950px) {
+	.main {
+		flex: 3 0px;
+	}
+	.aside-l {
+		order: 1;
+	}
+	.main {
+		order: 2;
+	}
+	.aside-r {
+		order: 3;
+	}
+	.moves {
+		order: 4;
+	}
+}
