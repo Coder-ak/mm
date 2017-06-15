@@ -180,7 +180,7 @@ console.log(secret);
 	//Highly inspired by http://github.com/michael0x2a/mastermind-solver
 	function filterPool(pool, guess, answer) {
 		var output = [];
-		pool.forEach(function(possible, index, list, callback) {
+		pool.forEach(function(possible) {
 			if (poolMatch(guess, answer, possible) && (possible !== guess)) {
 				output.push(possible);
 			}
@@ -192,7 +192,7 @@ console.log(secret);
 		var min_length = Number.POSITIVE_INFINITY;
 		var best_choice = null;
 
-		pool.forEach(function(possible, index, list) {
+		pool.forEach(function(possible) {
 			var length = filterPool(pool, possible, answer).length;
 			if (min_length > length) {
 				min_length = length;
@@ -202,7 +202,7 @@ console.log(secret);
 		
 		return best_choice;
 	}
-	
+
 	function poolMatch(guess, answer, possible) {
 		var answer2 = possible.slice().checkMove(guess.slice());
 		return (answer[0] === answer2[0]) && (answer[1] === answer2[1]);
